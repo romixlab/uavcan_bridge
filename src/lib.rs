@@ -2,6 +2,7 @@
 
 use uavcan::tx::breakdown::Breakdown;
 use uavcan::{CanFrame, CLASSIC_MTU};
+use uavcan::tail_byte::TransferId;
 
 #[derive(Debug)]
 struct Frame {
@@ -38,10 +39,10 @@ impl<'a> Iterator for UavcanFrames<'a> {
     }
 }
 
-pub fn to_uavcan(payload: &[u8]) -> UavcanFrames {
+pub fn to_uavcan(payload: &[u8], transfer_sequence_numger: TransferId) -> UavcanFrames {
     UavcanFrames {
         // We don't really use the frames that are returned so the can_id can be
         // ignored here.
-        frames: Breakdown::new(payload, 0),
+        frames: Breakdown::new(payload, transfer_sequence_numger, 0),
     }
 }
